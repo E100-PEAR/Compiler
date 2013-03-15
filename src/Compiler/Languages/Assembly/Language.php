@@ -11,6 +11,10 @@ class Language {
 	protected $commands = array();
 	public $variables = array();
 
+	// The compiler uses zero's and one's so
+	// we'll always need to include those.
+	public $largestInteger = 1;
+
 	public function __construct()
 	{
 		$this->variables = new Variables;
@@ -84,7 +88,12 @@ class Language {
 		// Integers
 		elseif($expression instanceof PHPParser_Node_Scalar_LNumber)
 		{
-			$value = $expression->value;
+			$value = '_int_'.$expression->value;
+
+			if($expression->value > $this->largestInteger)
+			{
+				$this->largestInteger = $expression->value;
+			}
 		}
 
 		else
@@ -134,19 +143,16 @@ class Language {
 
 		$output .= PHP_EOL;
 
-		foreach($this->variables->get() as $key => $value)
+		foreach($this->variables->get() as $variable)
 		{
-			$output .= $key . '  .data ' . $value . PHP_EOL;
+			$output .= $variable;
 		}
 
-		foreach($this->variables->getArrays() as $name => $items)
-		{
-			$output .= $name . ' .data 0' . PHP_EOL;
+		$output .= PHP_EOL;
 
-			foreach($items as $key => $value)
-			{
-				$output .= "{$name}_{$key} .data $value" . PHP_EOL;
-			}
+		for($i = 0; $i <= $this->largestInteger; $i++)
+		{
+			$output .= '_int_'.$i.' .data ' . $i.PHP_EOL;
 		}
 
 		return $output;
