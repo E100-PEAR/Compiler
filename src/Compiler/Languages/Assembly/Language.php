@@ -65,16 +65,13 @@ class Language {
 		{
 			if($expression->name->parts[0] == 'true')
 			{
-				$value = true;
+				$value = '_int_1';
 			}
 
 			else
 			{
-				$value = false;
+				$value = '_int_0';
 			}
-
-			// Todo: handle like integers.
-			$value = (int) $value;
 		}
 
 		// Strings.

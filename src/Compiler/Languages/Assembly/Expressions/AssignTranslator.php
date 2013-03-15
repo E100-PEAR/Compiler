@@ -30,9 +30,7 @@ class AssignTranslator extends Translator {
 		{
 			$array = $this->fetchKey($token);
 
-			// The first element of the array is unused, so start the offset
-			// at 1.
-			$offset = 1;
+			$offset = 0;
 
 			// We'll create an empty array just in case there are no items.
 			$this->language->variables->createArray($array);
@@ -45,10 +43,10 @@ class AssignTranslator extends Translator {
 				// Handle setting array elements by key.
 				if( ! is_null($item->key))
 				{
-					$offset = $this->language->expressionToMemory($item->key);
+					$key = $this->language->expressionToMemory($item->key);
 
 					// Initialize the array element.
-					$this->language->variables->get($array)->set($offset, 0);
+					$this->language->variables->get($array)->set($item->key->value, 0);
 				}
 
 				// Handle setting array elements with no specific key.
@@ -56,10 +54,12 @@ class AssignTranslator extends Translator {
 				{
 					// $this->language->variables->get($array)->addArrayElement($array);
 					$this->language->variables->get($array)->createElement();
+
+					$key = '_int_'.$offset;
 				}
 
 				// Now set the array element
-				$this->language->addCommand('cpta', $value, $array, $offset);
+				$this->language->addCommand('cpta', $value, $array, $key);
 
 				$offset++;
 			}
@@ -137,15 +137,13 @@ class AssignTranslator extends Translator {
 		{
 			if($token->expr->name->parts[0] == 'true')
 			{
-				$value = true;
+				$value = '_int_1';
 			}
 
 			else
 			{
-				$value = false;
+				$value = '_int_0';
 			}
-
-			$value = (int) $value;
 		}
 
 		// Strings.
