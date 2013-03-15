@@ -11,12 +11,25 @@ class Variables {
 		return isset($this->variables[$key]);
 	}
 
-	public function create($key, $value = 0)
+	public function create($key, $value = 0, $array = false)
 	{
 		if( ! $this->exists($key))
 		{
-			$this->variables[$key] = $value;
+			if($array)
+			{
+				$this->variables[$key] = new ArrayVariable($key, $value);
+			}
+
+			else
+			{
+				$this->variables[$key] = new Variable($key, $value);
+			}
 		}
+	}
+
+	public function createArray($key, array $values = array())
+	{
+		$this->create($key, $values, true);
 	}
 
 	public function set($key, $value)
@@ -35,35 +48,5 @@ class Variables {
 		{
 			return $this->variables[$key];
 		}
-	}
-
-	public function getArrays()
-	{
-		return $this->arrays;
-	}
-
-	public function arrayExists($array)
-	{
-		return isset($this->arrays[$array]);
-	}
-
-	public function createArray($array)
-	{
-		$this->arrays[$array] = array();
-	}
-
-	public function addArrayElement($array, $value = 0)
-	{
-		$this->arrays[$array][] = $value;
-	}
-
-	public function setArrayElement($array, $key, $value = 0)
-	{
-		$this->arrays[$array][$key] = $value;
-	}
-
-	public function getArrayElement($array, $key)
-	{
-		return $this->arrays[$array][$key] = $value;
 	}
 }

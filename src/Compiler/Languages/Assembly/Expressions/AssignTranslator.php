@@ -42,18 +42,20 @@ class AssignTranslator extends Translator {
 			{
 				$value = $this->language->expressionToMemory($item->value);
 
+				// Handle setting array elements by key.
 				if( ! is_null($item->key))
 				{
-					$key = $this->language->expressionToMemory($item->key);
+					$offset = $this->language->expressionToMemory($item->key);
 
 					// Initialize the array element.
-					$this->language->variables->setArrayElement($array, $key, 0);
+					$this->language->variables->get($array)->set($offset, 0);
 				}
 
+				// Handle setting array elements with no specific key.
 				else
 				{
-					// Initialize the array element.
-					$this->language->variables->addArrayElement($array);
+					// $this->language->variables->get($array)->addArrayElement($array);
+					$this->language->variables->get($array)->createElement();
 				}
 
 				// Now set the array element
