@@ -2,20 +2,50 @@
 
 class ArrayVariable {
 
+	/**
+	 * The name of the array.
+	 *
+	 * @var string
+	 */
 	public $name;
+
+	/**
+	 * The array's values.
+	 *
+	 * @var array
+	 */
 	public $values;
 
+	/**
+	 * Create a new array.
+	 *
+	 * @param  string  $name
+	 * @param  array   $values
+	 */
 	public function __construct($name, array $values = array())
 	{
 		$this->name = $name;
 		$this->values = $values;
 	}
 
+	/**
+	 * Add a new element to the end of the array.
+	 *
+	 * @param  mixed  $value
+	 * @return void
+	 */
 	public function createElement($value = 0)
 	{
 		$this->values[] = $value;
 	}
 
+	/**
+	 * Set the value to an element.
+	 *
+	 * @param  int     $key
+	 * @param  string  $value
+	 * @return void
+	 */
 	public function set($key, $value)
 	{
 		// We'll need to create empty elements if the key we're
@@ -28,6 +58,11 @@ class ArrayVariable {
 		$this->values[$key] = $value;
 	}
 
+	/**
+	 * Render the array.
+	 *
+	 * @return string
+	 */
 	public function __toString()
 	{
 		$output = "";
