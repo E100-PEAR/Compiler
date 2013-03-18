@@ -16,6 +16,7 @@ abstract class Language {
 		$this->compiler = $compiler;
 	}
 
+	abstract public function getTranslator($translator);
 
 	abstract public function getTranslation();
 }
