@@ -8,7 +8,10 @@ use PHPParser_Node_Expr_ConstFetch;
 
 class Language {
 
+	protected $compiler;
+
 	protected $commands = array();
+
 	public $variables = array();
 
 	public $scope = array();
@@ -22,11 +25,16 @@ class Language {
 		$this->variables = $variables;
 	}
 
-	public function get($compiler, $translator)
+	public function setCompiler($compiler)
+	{
+		$this->compiler = $compiler;
+	}
+
+	public function get($translator)
 	{
 		$translator = 'Compiler\\Languages\\Assembly\\'.$translator.'Translator';
 
-		return new $translator($compiler, $this);
+		return new $translator($this->compiler, $this);
 	}
 
 	public function addCommand($name, $param1 = null, $param2 = null, $param3 = null, $param4 = null)

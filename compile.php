@@ -8,7 +8,10 @@ $autoloader->add('Compiler', __DIR__.'/src/');
 $code = file_get_contents('sample.php');
 
 $parser = new PHPParser_Parser(new PHPParser_Lexer);
-$compiler = new Compiler\Compiler(new Compiler\Languages\Assembly\Language(new Compiler\Languages\Variables\Variables));
+$language = new Compiler\Languages\Assembly\Language(new Compiler\Languages\Variables\Variables);
+$compiler = new Compiler\Compiler($language);
+
+$language->setCompiler($compiler);
 
 try
 {
