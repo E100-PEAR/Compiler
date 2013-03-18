@@ -17,9 +17,9 @@ class Language {
 	// we'll always need to include those.
 	public $largestInteger = 1;
 
-	public function __construct()
+	public function __construct($variables)
 	{
-		$this->variables = new Variables;
+		$this->variables = $variables;
 	}
 
 	public function get($compiler, $translator)

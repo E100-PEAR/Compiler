@@ -1,4 +1,4 @@
-<?php namespace Compiler\Languages\Assembly;
+<?php namespace Compiler\Languages\Variables;
 
 class Variables {
 
