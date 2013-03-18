@@ -5,13 +5,31 @@ use PHPParser_Node_Expr;
 
 class Compiler {
 
+	/**
+	 * The language that the compiler compiles to.
+	 *
+	 * @var Object
+	 */
 	public $language;
 
+	/**
+	 * Register the language that the ocmpiler will compile to.
+	 *
+	 * @param  Object  $language
+	 * @return void
+	 */
 	public function __construct($language)
 	{
 		$this->language = $language;
 	}
 
+	/**
+	 * Compile tokens. If an array of tokens is passed, each token
+	 * will be parsed.
+	 *
+	 * @param  mixed   $tokens
+	 * @return string
+	 */
 	public function compile($tokens)
 	{
 		// Make sure the tokens are wrapped around in an array so
@@ -29,6 +47,13 @@ class Compiler {
 		return $this->language->getTranslation();
 	}
 
+	/**
+	 * Get the language's translator for a specific token. The translator
+	 * will read the token's data and output its translation.
+	 *
+	 * @param  mixed  $token
+	 * @return void
+	 */ 
 	public function getTranslator($token)
 	{
 		$translator = $this->getTokenTranslatorName($token);
@@ -36,6 +61,12 @@ class Compiler {
 		return $this->language->get($this, $translator);
 	}
 
+	/**
+	 * Get the translator's name that will compile a token.
+	 *
+	 * @param  string  $token
+	 * @return string
+	 */
 	public function getTokenTranslatorName($token)
 	{
 		// Get rid of the suffix.
