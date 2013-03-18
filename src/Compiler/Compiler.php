@@ -47,9 +47,4 @@ class Compiler {
 		// Replace underscore to backslashes for class names.
 		return str_replace('_', '\\', $type);
 	}
-
-	public function uid()
-	{
-		return md5(uniqid(time(), true));
-	}
 }
