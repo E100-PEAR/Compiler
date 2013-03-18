@@ -94,4 +94,21 @@ class Variables {
 			return $this->variables[$key];
 		}
 	}
+
+	/**
+	 * Output the variables.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		$output = '';
+
+		foreach($this->get() as $variable)
+		{
+			$output .= $variable;
+		}
+
+		return $output;
+	}
 }

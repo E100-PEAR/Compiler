@@ -141,13 +141,7 @@ class Language {
 		}
 
 		$output .= PHP_EOL;
-
-		foreach($this->variables->get() as $variable)
-		{
-			$output .= $variable;
-		}
-
-		$output .= PHP_EOL;
+		$output .= $this->variables . PHP_EOL;
 
 		for($i = 0; $i <= $this->largestInteger; $i++)
 		{
