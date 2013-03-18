@@ -11,6 +11,8 @@ class Language {
 	protected $commands = array();
 	public $variables = array();
 
+	public $scope = array();
+
 	// The compiler uses zero's and one's so
 	// we'll always need to include those.
 	public $largestInteger = 1;
@@ -153,5 +155,15 @@ class Language {
 		}
 
 		return $output;
+	}
+
+	public function setScope($scope)
+	{
+		$this->addMarker($scope.'_start');
+	}
+
+	public function removeScope($scope)
+	{
+		$this->addMarker($scope.'_end');
 	}
 }
