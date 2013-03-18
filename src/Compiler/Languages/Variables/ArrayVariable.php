@@ -61,8 +61,10 @@ class ArrayVariable {
 	/**
 	 * Render the array.
 	 *
+	 * @todo Make the class abstract and remove this method.
 	 * @return string
 	 */
+	//abstract public function __toString();
 	public function __toString()
 	{
 		$output = "";

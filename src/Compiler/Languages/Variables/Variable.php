@@ -11,6 +11,7 @@ class Variable {
 		$this->value = $value;
 	}
 
+	// abstract public function __toString();
 	public function __toString()
 	{
 		return $this->name . ' .data ' . $this->value . PHP_EOL;
