@@ -6,13 +6,11 @@ use PHPParser_Node_Scalar_String;
 use PHPParser_Node_Scalar_LNumber;
 use PHPParser_Node_Expr_ConstFetch;
 
-class Language {
+use Compiler\Languages\Language as CompilerLanguage;
 
-	protected $compiler;
+class Language extends CompilerLanguage {
 
 	protected $commands = array();
-
-	public $variables = array();
 
 	public $scope = array();
 
@@ -20,17 +18,7 @@ class Language {
 	// we'll always need to include those.
 	public $largestInteger = 1;
 
-	public function __construct($variables)
-	{
-		$this->variables = $variables;
-	}
-
-	public function setCompiler($compiler)
-	{
-		$this->compiler = $compiler;
-	}
-
-	public function get($translator)
+	public function getTranslator($translator)
 	{
 		$translator = 'Compiler\\Languages\\Assembly\\'.$translator.'Translator';
 

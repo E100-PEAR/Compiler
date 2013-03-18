@@ -58,7 +58,7 @@ class Compiler {
 	{
 		$translator = $this->getTokenTranslatorName($token);
 
-		return $this->language->get($translator);
+		return $this->language->getTranslator($translator);
 	}
 
 	/**
