@@ -105,12 +105,12 @@ class Language {
 
 	public function redirectTo($location)
 	{
-		$this->addCommand('be', $location, 'one', 'one');
+		$this->addCommand('be', $location, '_int_1', '_int_1');
 	}
 
 	public function addMarker($name)
 	{
-		$this->addCommand($name.' cp', 'zero', 'zero');
+		$this->addCommand($name.' cp', '_int_0', '_int_0');
 	}
 
 	public function getMemoryLocationName($input)
