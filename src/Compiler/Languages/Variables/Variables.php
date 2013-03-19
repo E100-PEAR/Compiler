@@ -49,6 +49,8 @@ class Variables {
 				$this->variables[$key] = new Variable($key, $value);
 			}
 		}
+
+		return $this->variables[$key];
 	}
 
 	/**
@@ -60,7 +62,7 @@ class Variables {
 	 */
 	public function createArray($key, array $values = array())
 	{
-		$this->create($key, $values, true);
+		return $this->create($key, $values, true);
 	}
 
 	/**
