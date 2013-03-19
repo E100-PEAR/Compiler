@@ -21,11 +21,11 @@ class EqualTranslator extends Translator {
 
 		// The two values did not match. Set the value to zero and redirect
 		// back to the if statement.
-		$this->language->addCommand('cp', $hash, 'zero');
-		$this->language->addCommand('be', $if, 'one', 'one');
+		$this->language->addCommand('cp', $hash, '_int_0');
+		$this->language->addCommand('be', $if, '_int_1', '_int_1');
 
 		// The two values did match. Set the value to one and let
 		// the PC fall through.
-		$this->language->addCommand($match.' cp', $hash, 'one');
+		$this->language->addCommand($match.' cp', $hash, '_int_1');
 	}
 }
