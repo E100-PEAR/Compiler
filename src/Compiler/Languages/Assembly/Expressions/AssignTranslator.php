@@ -1,7 +1,6 @@
 <?php namespace Compiler\Languages\Assembly\Expressions;
 
 use PHPParser_Node_Name;
-
 use PHPParser_Node_Expr_Array;
 use PHPParser_Node_Expr_Variable;
 use PHPParser_Node_Scalar_String;
@@ -14,8 +13,11 @@ use Compiler\Languages\Translator;
 
 class AssignTranslator extends Translator {
 
-	protected $assigningArray = false;
-
+	/**
+	 * The operators that can happen during the assignment.
+	 *
+	 * @var array
+	 */
 	protected $operations = array(
 		'PHPParser_Node_Expr_Plus',
 		'PHPParser_Node_Expr_Minus',
@@ -23,104 +25,197 @@ class AssignTranslator extends Translator {
 		'PHPParser_Node_Expr_Div',
 	);
 
+	const ARRAY_ASSIGNMENT = 0;
+	const FUNCTION_ASSIGNMENT = 1;
+	const ARRAY_ELEMENT_ASSIGNMENT = 2;
+	const VARIABLE_ASSIGNMENT = 3;
+
+	/**
+	 * Translate the token. Note that any side-effects will
+	 * be sent to the language object.
+	 *
+	 * @param  mixed  $token
+	 * @return void
+	 */
 	public function translate($token)
 	{
-		// Handle array assignment to a variable.
+		$type = $this->getAssignmentType($token);
+
+		if($type == static::ARRAY_ASSIGNMENT)
+		{
+			$this->handleArrayAssignment($token);
+		}
+
+		elseif($type == static::FUNCTION_ASSIGNMENT)
+		{
+			$this->handleFunctionAssignment($token);
+		}
+
+		elseif($type == static::ARRAY_ELEMENT_ASSIGNMENT)
+		{
+			$this->handleElementAssignment($token);
+		}
+
+		elseif($type == static::VARIABLE_ASSIGNMENT)
+		{
+			$this->handleVariableAssignment($token);
+		}
+	}
+
+	/**
+	 * Get the type of the assignment operation.
+	 *
+	 * @param  mixed  $token
+	 * @return int
+	 */
+	public function getAssignmentType($token)
+	{
+		if($token->expr instanceof PHPParser_node_Expr_Array)
+		{
+			return static::ARRAY_ASSIGNMENT;
+		}
+
+		if($token->expr instanceof PHPParser_Node_Expr_FuncCall)
+		{
+			return static::FUNCTION_ASSIGNMENT;
+		}
+
+		if($token->var instanceof PHPParser_Node_Expr_ArrayDimFetch)
+		{
+			return static::ARRAY_ELEMENT_ASSIGNMENT;
+		}
+
+		return static::VARIABLE_ASSIGNMENT;
+	}
+
+	/**
+	 * Handle array assignments.
+	 *
+	 * @param  string  $token
+	 * @return void
+	 */
+	public function handleArrayAssignment($token)
+	{
+		// Are we assigning an array to the variable?
 		if($token->expr instanceof PHPParser_Node_Expr_Array)
 		{
-			$array = $this->fetchKey($token);
+			$arrayName = $token->var->name;
+			
+			// We'll create an empty array now. Otherwise, the array would not be
+			// created if this assignment did not have any items to assign to memory.
+			$array = $this->language->variables->createArray($arrayName);
 
 			$offset = 0;
-
-			// We'll create an empty array just in case there are no items.
-			$this->language->variables->createArray($array);
+			$usedOffsets = array();
 
 			// Add each item to the array.
-			foreach($token->expr->items as $item)
+			foreach($token->expr->items as $element)
 			{
-				$value = $this->language->expressionToMemory($item->value);
-
-				// Handle setting array elements by key.
-				if( ! is_null($item->key))
+				// If the element's key isn't null we will use that key.
+				if( ! is_null($element->key))
 				{
-					$key = $this->language->expressionToMemory($item->key);
+					$key = $this->language->expressionToMemory($element->key);
 
-					// Initialize the array element.
-					$this->language->variables->get($array)->set($item->key->value, 0);
+					$usedOffsets[] = $element->key->value;
 				}
 
-				// Handle setting array elements with no specific key.
+				// Otherwise, let's find an unused offset and assign the value to
+				// that offset.
 				else
 				{
-					// $this->language->variables->get($array)->addArrayElement($array);
-					$this->language->variables->get($array)->createElement();
+					// We will increment the offset by one until we hit a fresh offset.
+					while(in_array($offset, $usedOffsets))
+					{
+						$offset++;
+					}
 
-					$key = '_int_'.$offset;
+					$key = $this->language->expressionToMemory($offset);
+
+					$usedOffsets[] = $offset;
 				}
 
-				// Now set the array element
-				$this->language->addCommand('cpta', $value, $array, $key);
+				// Fetch the element's value's label.
+				$value = $this->language->expressionToMemory($element->value);
 
-				$offset++;
-			}
-		}
-
-		// Handle cases that aren't array declaration.
-		else
-		{
-			$key = $this->fetchKey($token);
-
-			// Handle function calls.
-			if($token->expr instanceof PHPParser_Node_Expr_FuncCall)
-			{
-				$this->compiler->compile($token->expr);
-
-				$name = $token->expr->name->parts[0];
-
-				$this->language->addCommand('cp', $key, 'function_'.$name.'_return');
-			}
-
-			else
-			{
-				$value = $this->fetchValue($token);
-
-				// Are we setting an element to an array?
-				if($token->var instanceof PHPParser_Node_Expr_ArrayDimFetch)
+				// Make sure that the array has allocated memory for the
+				// element.
+				if( ! $array->exists($key))
 				{
-					$array = $token->var->var->name;
-					$offset = $token->var->dim->value + 1;
-
-					$this->language->variables->setArrayElement($array, $offset, 0);
-
-					$this->language->addCommand('cpta', $value, $array, $offset);
+					$array->set($key, 0);
 				}
 
-				// Otherwise, we're just setting a variable.
-				else
-				{
-					$this->language->variables->create($key);
-
-					$this->language->addCommand('cp', $key, $value);
-				}
+				// Set the value of the element to the array.
+				$this->language->addCommand('cpta', $value, $arrayName, $key);
 			}
 		}
 	}
 
-	public function fetchKey($token)
+	/**
+	 * Assign to a variable the output of a function.
+	 *
+	 * @param  mixed  $token
+	 * @return void
+	 */
+	public function handleFunctionAssignment($token)
 	{
-		return $token->var->name;
+		$this->compiler->compile($token->expr);
+
+		$name = $token->expr->name->parts[0];
+
+		$this->language->addCommand('cp', $token->var->name, 'function_'.$name.'_return');
 	}
 
+	/**
+	 * Handle assigning a value to a specific element from an array.
+	 *
+	 * @param  mixed  $token
+	 * @return void
+	 */
+	public function handleElementAssignment($token)
+	{
+		$array = $token->var->var->name;
+		$offset = $token->var->dim->value;
+
+		// Make sure the array has allocated memory for the element.
+		$this->language->variables->get($array)->set($offset, 0);
+
+		// Convert the array offset and element value into valid assembly
+		// labels.
+		$offset = $this->language->expressionToMemory($offset);
+		$value = $this->fetchValue($token);
+
+		// And lastly, save the element's value to the array.
+		$this->language->addCommand('cpta', $value, $array, $offset);
+	}
+
+	/**
+	 * Assign a variable to a variable... variable-ception.
+	 *
+	 * @param  mixed  $token
+	 * @return void
+	 */
+	public function handleVariableAssignment($token)
+	{
+		$this->language->variables->create($token->var->name);
+
+		$this->language->addCommand('cp', $token->var->name, $this->fetchValue($token));
+	}
+
+	/** 
+	 * Fetch the value of what will be assigned.
+	 *
+	 * @param  mixed  $token
+	 * @return void
+	 */
 	public function fetchValue($token)
 	{
-		// Just return the name of the variable, it doesn't need
-		// anything special. 
+		// If the value is just a variable we don't need to do anything fancy.
 		if($token->expr instanceof PHPParser_Node_Expr_Variable)
 		{
 			return $token->expr->name;
 		}
 
-		// Handle operations such as addition.
+		// Handle basic mathetmatical operations.
 		$tokenExpressionClass = get_class($token->expr);
 
 		foreach($this->operations as $operation)
@@ -137,6 +232,8 @@ class AssignTranslator extends Translator {
 			}
 		}
 
+		// If we're here, just blindly convert the expression into its matching
+		// label in the memory.
 		return $this->language->expressionToMemory($token->expr);
 	}
 }
