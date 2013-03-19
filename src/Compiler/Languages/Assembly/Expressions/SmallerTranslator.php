@@ -18,12 +18,12 @@ class SmallerTranslator extends Translator {
 		$this->language->addCommand('blt', $smaller, $left, $right);
 
 		// The condition failed, set the value to zero.
-		$this->language->addCommand('cp', $hash, 'zero');
+		$this->language->addCommand('cp', $hash, '_int_0');
 		$this->language->redirectTo($end);
 
 		// The left side was smaller than the right side.
 		// Set the value to one and let the PC fall through.
-		$this->language->addCommand($smaller.' cp', $hash, 'one');
+		$this->language->addCommand($smaller.' cp', $hash, '_int_1');
 
 		$this->language->addMarker($end);
 	}
