@@ -23,6 +23,12 @@ class Command {
 	 */
 	protected $parameters = array();
 
+	/**
+	 * Set the command's type.
+	 *
+	 * @param  string  $type
+	 * @return Compiler\Languages\Assembly\Commands\Command
+	 */ 
 	public function setType($type)
 	{
 		$this->type = $type;
