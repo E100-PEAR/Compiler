@@ -99,6 +99,14 @@ class AssignTranslator extends Translator {
 				else
 				{
 					$this->language->variables->create($key);
+
+					// The value will be a string if the variable is being set to a label.
+					// Make sure that the label actually exists. 
+					if(is_string($value))
+					{
+						$this->language->variables->create($value);
+					}
+
 					$this->language->addCommand('cp', $key, $value);
 				}
 			}
