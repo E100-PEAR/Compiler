@@ -100,13 +100,6 @@ class AssignTranslator extends Translator {
 				{
 					$this->language->variables->create($key);
 
-					// The value will be a string if the variable is being set to a label.
-					// Make sure that the label actually exists. 
-					if(is_string($value))
-					{
-						$this->language->variables->create($value);
-					}
-
 					$this->language->addCommand('cp', $key, $value);
 				}
 			}
@@ -134,45 +127,16 @@ class AssignTranslator extends Translator {
 		{
 			if($tokenExpressionClass == $operation)
 			{
+				$operatorReturnValue = 'a'.spl_object_hash($token->expr);
+
+				$this->language->variables->create($operatorReturnValue);
+
 				$this->compiler->compile(array($token->expr));
 
-				return 'a'.spl_object_hash($token->expr);
+				return $operatorReturnValue;
 			}
 		}
 
-		// Booleans.
-		if($token->expr instanceof PHPParser_Node_Expr_ConstFetch)
-		{
-			if($token->expr->name->parts[0] == 'true')
-			{
-				$value = '_int_1';
-			}
-
-			else
-			{
-				$value = '_int_0';
-			}
-		}
-
-		// Strings.
-		elseif($token->expr instanceof PHPParser_Node_Scalar_String)
-		{
-			$value = $token->expr->value;
-
-			throw new \Compiler\Error("Cannot assign string to variable.");
-		}
-
-		// Integers
-		elseif($token->expr instanceof PHPParser_Node_Scalar_LNumber)
-		{
-			$value = $token->expr->value;
-		}
-
-		else
-		{
-			throw new \Compiler\Error("Assigning unknown type [$tokenExpressionClass] to variable.");
-		}
-
-		return $this->language->getMemoryLocationName($value);
+		return $this->language->expressionToMemory($token->expr);
 	}
 }
