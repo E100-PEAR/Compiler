@@ -29,6 +29,17 @@ class ArrayVariable {
 	}
 
 	/**
+	 * Check if a value exists.
+	 *
+	 * @param  string  $key
+	 * @return bool
+	 */
+	public function exists($key)
+	{
+		return isset($this->values[$key]);
+	}
+
+	/**
 	 * Add a new element to the end of the array.
 	 *
 	 * @param  mixed  $value
