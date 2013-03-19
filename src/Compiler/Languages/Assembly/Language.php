@@ -81,13 +81,17 @@ class Language extends CompilerLanguage {
 		}
 
 		// Integers
-		elseif($expression instanceof PHPParser_Node_Scalar_LNumber)
+		elseif($expression instanceof PHPParser_Node_Scalar_LNumber or is_int($expression))
 		{
-			$value = '_int_'.$expression->value;
+			// We'll play nice and allow scalar integers to be converted even though
+			// they're not really an expression.
+			$integer = (is_int($expression)) ? $expression : $expression->value;
 
-			if($expression->value > $this->largestInteger)
+			$value = '_int_'.$integer;
+
+			if($integer > $this->largestInteger)
 			{
-				$this->largestInteger = $expression->value;
+				$this->largestInteger = $integer;
 			}
 		}
 
