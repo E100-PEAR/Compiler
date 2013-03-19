@@ -7,6 +7,7 @@ use PHPParser_Node_Scalar_LNumber;
 use PHPParser_Node_Expr_ConstFetch;
 
 use Compiler\Languages\Language as CompilerLanguage;
+use Compiler\Languages\Assembly\Commands\Command;
 
 class Language extends CompilerLanguage {
 
@@ -25,25 +26,22 @@ class Language extends CompilerLanguage {
 		return new $translator($this->compiler, $this);
 	}
 
-	public function addCommand($name, $param1 = null, $param2 = null, $param3 = null, $param4 = null)
+	public function addCommand($name, $param1 = null, $param2 = null, $param3 = null)
 	{
-		$tag = "\t";
+		$tag = null;
 
 		if(strpos($name, ' ') !== false)
 		{
 			list($tag, $name) = explode(' ', $name);
 		}
 
-		$this->commands[] = array(
-			'tag' => $tag,
-			'name' => $name,
-			'parameters' => array(
-				$param1,
-				$param2,
-				$param3,
-				$param4,
-			),
-		);
+		$command = new Command;
+
+		$command->setType($name);
+		$command->setParameters($param1, $param2, $param3);
+		$command->setLabel($tag);
+
+		$this->commands[] = $command;
 	}
 
 	public function expressionToMemory($expression)
@@ -126,18 +124,7 @@ class Language extends CompilerLanguage {
 
 		foreach($this->commands as $command)
 		{
-			$output .= $command['tag'].' ';
-			$output .= $command['name'];
-
-			foreach($command['parameters'] as $param)
-			{
-				if( ! is_null($param))
-				{
-					$output .= ' ' . $param;
-				}
-			}
-
-			$output .= PHP_EOL;
+			$output .= $command;
 		}
 
 		$output .= PHP_EOL;
