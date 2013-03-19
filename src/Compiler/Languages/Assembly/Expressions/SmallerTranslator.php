@@ -15,7 +15,7 @@ class SmallerTranslator extends Translator {
 		$end  = $hash.'1';
 
 		// Check the condition.
-		$this->language->addCommand('bl', $smaller, $left, $right);
+		$this->language->addCommand('blt', $smaller, $left, $right);
 
 		// The condition failed, set the value to zero.
 		$this->language->addCommand('cp', $hash, 'zero');
