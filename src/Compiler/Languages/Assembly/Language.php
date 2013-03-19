@@ -137,6 +137,7 @@ class Language extends CompilerLanguage {
 		}
 
 		$output .= PHP_EOL;
+		$output .= 'halt' . PHP_EOL.PHP_EOL;
 		$output .= $this->variables . PHP_EOL;
 
 		for($i = 0; $i <= $this->largestInteger; $i++)
