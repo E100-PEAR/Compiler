@@ -6,7 +6,7 @@ class WhileTranslator extends Translator {
 
 	public function translate($token)
 	{
-		$hash = spl_object_hash($token);
+		$hash = 'a'.spl_object_hash($token);
 
 		$this->compileConditionals($hash, $token);
 
@@ -23,7 +23,7 @@ class WhileTranslator extends Translator {
 
 		// Create a conditional value. This will be set to 0 if the conditions
 		// fail, or 1 if the conditions pass.
-		$conditional = spl_object_hash($token->cond);
+		$conditional = 'a'.spl_object_hash($token->cond);
 
 		$this->language->variables->create($conditional);
 

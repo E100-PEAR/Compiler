@@ -6,7 +6,7 @@ class FuncCallTranslator extends Translator {
 
 	public function translate($expression)
 	{
-		$hash = spl_object_hash($expression);
+		$hash = 'a'.spl_object_hash($expression);
 
 		$name = $expression->name->parts[0];
 

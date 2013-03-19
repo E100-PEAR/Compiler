@@ -6,7 +6,7 @@ class PostIncTranslator extends Translator {
 
 	public function translate($expression)
 	{
-		$left  = $this->language->expressionToMemory($expression->var);
+		$left = $this->language->expressionToMemory($expression->var);
 
 		$this->language->addCommand('add', $left, $left, '_int_1');
 

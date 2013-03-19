@@ -6,7 +6,7 @@ class FunctionTranslator extends Translator {
 
 	public function translate($token)
 	{
-		$hash = spl_object_hash($token);
+		$hash = 'a'.spl_object_hash($token);
 
 		$this->compileFunction($hash, $token);
 

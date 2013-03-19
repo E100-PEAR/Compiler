@@ -6,7 +6,7 @@ class VariableTranslator extends Translator {
 
 	public function translate($token)
 	{
-		$hash = spl_object_hash($token);
+		$hash = 'a'.spl_object_hash($token);
 
 		$if = $hash.'0';
 		$finish = $hash.'1';

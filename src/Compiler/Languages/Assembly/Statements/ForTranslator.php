@@ -6,7 +6,7 @@ class ForTranslator extends Translator {
 
 	public function translate($token)
 	{
-		$hash = spl_object_hash($token);
+		$hash = 'a'.spl_object_hash($token);
 
 		// Compile the initial statements that occur before the loop.
 		$this->compileInit($token);
@@ -41,7 +41,7 @@ class ForTranslator extends Translator {
 			// 0 if the condition fails, or 1 if the condition passes.
 			// Create the variable here so that the expression can set the
 			// value later.
-			$condition = spl_object_hash($expression);
+			$condition = 'a'.spl_object_hash($expression);
 
 			$this->language->variables->create($condition);
 

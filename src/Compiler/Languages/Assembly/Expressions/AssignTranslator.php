@@ -128,7 +128,7 @@ class AssignTranslator extends Translator {
 			{
 				$this->compiler->compile(array($token->expr));
 
-				return spl_object_hash($token->expr);
+				return 'a'.spl_object_hash($token->expr);
 			}
 		}
 

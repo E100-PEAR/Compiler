@@ -9,7 +9,7 @@ class DivTranslator extends Translator {
 		$left  = $this->language->expressionToMemory($expression->left);
 		$right = $this->language->expressionToMemory($expression->right);
 
-		$hash = spl_object_hash($expression);
+		$hash = 'a'.spl_object_hash($expression);
 
 		$this->language->addCommand('div', $hash, $left, $right);
 

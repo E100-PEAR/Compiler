@@ -9,7 +9,7 @@ class SmallerTranslator extends Translator {
 		$left = $this->language->expressionToMemory($token->left);
 		$right = $this->language->expressionToMemory($token->right);
 		
-		$hash = spl_object_hash($token);
+		$hash = $this->getHash($token);
 
 		$smaller = $hash .'0';
 		$end  = $hash.'1';
@@ -26,5 +26,10 @@ class SmallerTranslator extends Translator {
 		$this->language->addCommand($smaller.' cp', $hash, '_int_1');
 
 		$this->language->addMarker($end);
+	}
+
+	public function getHash($token)
+	{
+		return 'a'.spl_object_hash($token);
 	}
 }

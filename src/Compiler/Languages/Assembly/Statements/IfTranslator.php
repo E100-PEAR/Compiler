@@ -6,7 +6,7 @@ class IfTranslator extends Translator {
 
 	public function translate($token)
 	{
-		$hash = spl_object_hash($token->cond);
+		$hash = 'a'.spl_object_hash($token->cond);
 
 		$branch = $hash.'0';
 		$else = $hash.'1';

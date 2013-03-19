@@ -9,7 +9,7 @@ class GreaterTranslator extends Translator {
 		$left = $this->language->expressionToMemory($token->left);
 		$right = $this->language->expressionToMemory($token->right);
 		
-		$hash = spl_object_hash($token);
+		$hash = 'a'.spl_object_hash($token);
 
 		$if = $hash.'0';
 		$finish  = $hash.'1';
