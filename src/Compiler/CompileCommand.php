@@ -6,7 +6,6 @@ use PHPParser_Parser as Parser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Illuminate\Filesystem\Filesystem;
@@ -14,12 +13,37 @@ use Illuminate\Filesystem\FileNotFoundException;
 
 class CompileCommand extends Command {
 
+	/**
+	 * The filesystem that'll let us read and write to files.
+	 *
+	 * @var Illuminate\Filesystem\Filesystem
+	 */
 	protected $filesystem;
 
+	/**
+	 * The parser that will parse the inputted code into an
+	 * Abstract Syntax Tree.
+	 *
+	 * @var PHPParser_Parser
+	 */
 	protected $parser;
 
+	/**
+	 * The compiler that will compile the Syntax Tree generated
+	 * by the parser.
+	 *
+	 * @var Compiler\Compiler
+	 */
 	protected $compiler;
 
+	/**
+	 * Register the filesystem, parser, compiler and command.
+	 *
+	 * @param  Illuminate\Filesystem\Filesystem  $filesystem
+	 * @param  PHPParser_Parser                  $parser
+	 * @param  Compiler\Compiler                 $compiler
+	 * @return void
+	 */
 	public function __construct(Filesystem $filesystem, Parser $parser, Compiler $compiler)
 	{
 		$this->filesystem = $filesystem;
@@ -29,6 +53,11 @@ class CompileCommand extends Command {
 		parent::__construct();
 	}
 
+	/**
+	 * Set the command's configurations.
+	 *
+	 * @return void
+	 */
 	protected function configure()
 	{
 		$this->setName('compile')
@@ -37,6 +66,13 @@ class CompileCommand extends Command {
 		     ->addArgument('output', InputArgument::OPTIONAL, 'The file where the code will be compiled.', 'compiled.txt');
 	}
 
+	/**
+	 * Compile some code!
+	 *
+	 * @param  Symfony\Component\Console\Input\InputInterface;
+	 * @param  Symfony\Component\Console\Output\OutputInterface;
+	 * @return void
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$file = $input->getArgument('file');
