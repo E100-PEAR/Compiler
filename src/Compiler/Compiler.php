@@ -21,6 +21,8 @@ class Compiler {
 	public function __construct($language)
 	{
 		$this->language = $language;
+
+		$this->language->setCompiler($this);
 	}
 
 	/**
