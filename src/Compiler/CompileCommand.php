@@ -62,7 +62,7 @@ class CompileCommand extends Command {
 	{
 		$this->setName('compile')
 		     ->setDescription('Compile a PHP script into E100 Assembly.')
-		     ->addArgument('file', InputArgument::REQUIRED, 'Which file or folder do you want to compile?')
+		     ->addArgument('file', InputArgument::REQUIRED, 'Which file or folder do you want to compile?', 'source.php');
 		     ->addArgument('output', InputArgument::OPTIONAL, 'The file where the code will be compiled.', 'compiled.txt');
 	}
 
