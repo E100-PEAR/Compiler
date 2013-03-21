@@ -21,11 +21,11 @@ class GreaterTranslator extends Translator {
 
 		// The left side was less than the right side. Set the value to zero and redirect
 		// back to the if statement.
-		$this->language->addCommand('cp', $hash, 'zero');
-		$this->language->addCommand('be', $if, 'one', 'one');
+		$this->language->addCommand('cp', $hash, '_int_1');
+		$this->language->addCommand('be', $if, '_int_1', '_int_1');
 
 		// The left side was greater than the right side. Set the value to one and let
 		// the PC fall through.
-		$this->language->addCommand($greater.' cp', $hash, 'one');
+		$this->language->addCommand($greater.' cp', $hash, '_int_1');
 	}
 }

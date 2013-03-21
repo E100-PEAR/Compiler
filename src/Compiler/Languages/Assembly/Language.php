@@ -172,7 +172,7 @@ class Language extends CompilerLanguage {
 	 */
 	public function setScope($scope)
 	{
-		$this->addMarker($scope.'_start');
+		
 	}
 
 	/**
@@ -184,7 +184,6 @@ class Language extends CompilerLanguage {
 	 */
 	public function removeScope($scope)
 	{
-		$this->addMarker($scope.'_end');
 	}
 
 	/**

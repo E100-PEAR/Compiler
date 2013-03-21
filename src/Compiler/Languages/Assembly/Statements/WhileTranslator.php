@@ -31,7 +31,7 @@ class WhileTranslator extends Translator {
 		$this->compiler->compile($token->cond);
 
 		// Redirect to the end of the while loop block if the conditionals fail.
-		$this->language->addCommand('be', $hash.'1', $conditional, '_int_zero');
+		$this->language->addCommand('be', $hash.'1', $conditional, '_int_0');
 	}
 
 	public function compileStatements($hash, $token)

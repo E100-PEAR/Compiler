@@ -28,7 +28,7 @@ class IfTranslator extends Translator {
 		
 		// If the condition is not met, redirect to the end of the if statement's
 		// code block, or the elses if they exist.
-		$this->language->addCommand($branch.' bne', $redirectElse, $hash, 'one');
+		$this->language->addCommand($branch.' bne', $redirectElse, $hash, '_int_1');
 
 		// Compile the statements inside the if statement block. These will be skipped
 		// if the conditional fails.
