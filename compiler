@@ -3,6 +3,7 @@
 
 include 'vendor/autoload.php';
 
+use Compiler\Compiler;
 use Compiler\CompileCommand;
 use Symfony\Component\Console\Application;
 use Illuminate\Filesystem\Filesystem;
@@ -10,7 +11,7 @@ use Compiler\Languages\Assembly\Language as AssemblyLanguage;
 
 $files = new Filesystem;
 $parser = new PHPParser_Parser(new PHPParser_Lexer);
-$compiler = new Compiler\Compiler(new AssemblyLanguage);
+$compiler = new Compiler(new AssemblyLanguage);
 
 $compileCommand = new CompileCommand($files, $parser, $compiler);
 

@@ -78,6 +78,8 @@ class CompileCommand extends Command {
 		$file = $input->getArgument('file');
 		$out  = $input->getArgument('output');
 
+		ini_set('xdebug.max_nesting_level', 2000);
+
 		try
 		{
 			$output->writeln('<info>Reading file '.$file.'.<info>');
