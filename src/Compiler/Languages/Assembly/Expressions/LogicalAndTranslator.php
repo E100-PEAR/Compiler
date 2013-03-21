@@ -2,7 +2,7 @@
 
 use Compiler\Languages\Translator;
 
-class BooleanAndTranslator extends Translator {
+class LogicalAndTranslator extends Translator {
 
 	public function translate($token)
 	{

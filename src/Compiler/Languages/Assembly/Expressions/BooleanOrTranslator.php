@@ -2,7 +2,7 @@
 
 use Compiler\Languages\Translator;
 
-class BooleanAndTranslator extends Translator {
+class BooleanOrTranslator extends Translator {
 
 	public function translate($token)
 	{
@@ -13,6 +13,6 @@ class BooleanAndTranslator extends Translator {
 		$this->compiler->compile($token->left);
 		$this->compiler->compile($token->right);
 
-		$this->language->addCommand('and', $hash, $left, $right);
+		$this->language->addCommand('or', $hash, $left, $right);	
 	}
 }
