@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+<?php
+
+include 'vendor/autoload.php';
+
+use Compiler\CompileCommand;
+use Symfony\Component\Console\Application;
+use Illuminate\Filesystem\Filesystem;
+use Compiler\Languages\Assembly\Language as AssemblyLanguage;
+
+$files = new Filesystem;
+$parser = new PHPParser_Parser(new PHPParser_Lexer);
+$compiler = new Compiler\Compiler(new AssemblyLanguage);
+
+$compileCommand = new CompileCommand($files, $parser, $compiler);
+
+$application = new Application;
+
+$application->add($compileCommand);	
+$application->run();
