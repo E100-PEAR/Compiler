@@ -1,5 +1,12 @@
 {
     "require": {
-        "nikic/php-parser": "0.9.3"
+        "symfony/console": "dev-master",
+        "nikic/php-parser": "0.9.3",
+        "illuminate/support": "v4.0.0-BETA3",
+        "illuminate/filesystem": "v4.0.0-BETA3"
+    },
+
+    "autoload": {
+        "classmap": ["src/"]
     }
 }
