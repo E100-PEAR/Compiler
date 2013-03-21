@@ -201,7 +201,7 @@ class Language extends CompilerLanguage {
 		}
 
 		$output .= PHP_EOL;
-		$output .= 'halt' . PHP_EOL.PHP_EOL;
+		$output .= "\t".'halt' . PHP_EOL.PHP_EOL;
 
 		$output .= $this->variables . PHP_EOL;
 
