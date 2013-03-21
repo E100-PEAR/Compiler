@@ -158,11 +158,12 @@ class AssignTranslator extends Translator {
 	 */
 	public function handleFunctionAssignment($token)
 	{
+		$hash = 'a'.spl_object_hash($token->expr);
+
 		$this->compiler->compile($token->expr);
 
-		$name = $token->expr->name->parts[0];
-
-		$this->language->addCommand('cp', $token->var->name, 'function_'.$name.'_return');
+		$this->language->variables->create($hash, 0);
+		$this->language->addCommand('cp', $token->var->name, $hash);
 	}
 
 	/**
