@@ -20,7 +20,7 @@ class FuncCallTranslator extends Translator {
 
 		else
 		{
-			$this->handleFunctionCall();
+			$this->handleFunctionCall($expression);
 		}
 	}
 
@@ -36,11 +36,9 @@ class FuncCallTranslator extends Translator {
 
 	public function handleGetPort($expression)
 	{
-		$hash = 'a'.spl_object_hash($expression);
-
 		$port = $expression->args[0]->value->value;
 
-		$this->language->addCommand('in', $port, $hash);
+		$this->language->addCommand('in', $port, 'function_get_port_return_value');
 	}
 
 	public function handleFunctionCall($expression)
@@ -58,10 +56,7 @@ class FuncCallTranslator extends Translator {
 			$this->language->addCommand('cp', $scope.$key, $argument->value->name);
 		}
 
-		$this->language->variables->create($marker.'_ra');
-		$this->language->variables->create($marker.'_return');
-
-		$this->language->addCommand('cp', $marker.'_ra', $hash);
+		$this->language->addCommand('cp', $marker.'_return_address', $hash);
 
 		$this->language->redirectTo($marker);
 		$this->language->addMarker($hash);

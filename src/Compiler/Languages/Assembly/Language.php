@@ -19,12 +19,12 @@ class Language extends CompilerLanguage {
 	protected $commands = array();
 
 	/**
-	 * The current scope of the language.
+	 * The currently called functions/methods.
 	 *
 	 * @todo implement
 	 * @var  array
 	 */
-	public $scope = array();
+	public $callStack = array();
 
 	/**
 	 * The largest integer that the compiler should generate.
@@ -164,26 +164,35 @@ class Language extends CompilerLanguage {
 	}
 
 	/**
-	 * Set the current scope.
+	 * Add an additional call to the call stack.
 	 *
-	 * @todo   Make this actually do something!
-	 * @param  string  $scope
+	 * @param  string  $call
 	 * @return void
 	 */
-	public function setScope($scope)
+	public function addCall($call)
 	{
-		
+		$this->callStack[] = $call;
+	}
+
+	/**
+	 * The name of the deepest function added
+	 * to the call stack.
+	 *
+	 * @return string
+	 */
+	public function currentCall()
+	{
+		return end($this->callStack);
 	}
 
 	/**
 	 * Remove a scope.
 	 *
-	 * @todo   Make this actually do something!
-	 * @param  string  $scope
 	 * @return void
 	 */
-	public function removeScope($scope)
+	public function removeCall()
 	{
+		array_pop($this->callStack);
 	}
 
 	/**

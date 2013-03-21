@@ -22,13 +22,12 @@ class FunctionTranslator extends Translator {
 		// Redirect to the end of the function's statements if the code
 		// procedurally reaches the function. 
 		$this->language->redirectTo($hash.'0');
-
 		$this->language->addMarker('function_'.$token->name);
 
-		$this->language->variables->create('function_return_value');
-		$this->language->variables->create('function_return_address');
+		$this->language->addCall($token->name);
 
-		$this->language->setScope('func_'.$token->name);
+		$this->language->variables->create('function_'.$token->name.'_return_value');
+		$this->language->variables->create('function_'.$token->name.'_return_address');
 	}
 
 	public function compileParameters($hash, $token)
@@ -54,7 +53,7 @@ class FunctionTranslator extends Translator {
 
 	public function compileEnd($hash, $token)
 	{
-		$this->language->removeScope('func_'.$token->name);
+		$this->language->removeCall();
 
 		$this->language->addMarker($hash.'0');
 	}

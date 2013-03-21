@@ -163,7 +163,7 @@ class AssignTranslator extends Translator {
 		$this->compiler->compile($token->expr);
 
 		$this->language->variables->create($hash, 0);
-		$this->language->addCommand('cp', $token->var->name, $hash);
+		$this->language->addCommand('cp', $token->var->name, $token->expr->name->parts[0]);
 	}
 
 	/**
