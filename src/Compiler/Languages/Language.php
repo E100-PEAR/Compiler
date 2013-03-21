@@ -25,8 +25,13 @@ abstract class Language {
 	 * @param  Compiler\Languages\Variables\Variables  $variables
 	 * @return void
 	 */
-	public function __construct(Variables $variables)
+	public function __construct(Variables $variables = null)
 	{
+		if(is_null($variables))
+		{
+			$variables = new Variables;
+		}
+
 		$this->variables = $variables;
 	}
 
