@@ -17,7 +17,7 @@ class GreaterTranslator extends Translator {
 
 		// Since e100 has no greater operator, we will reverse the left
 		// and right side and do a less than.
-		$this->language->addCommand('bl', $greater, $right, $left);
+		$this->language->addCommand('blt', $greater, $right, $left);
 
 		// The left side was less than the right side. Set the value to zero and redirect
 		// back to the if statement.
