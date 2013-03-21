@@ -13,6 +13,9 @@ class LogicalOrTranslator extends Translator {
 		$this->compiler->compile($token->left);
 		$this->compiler->compile($token->right);
 
+		$this->language->variables->create($left);
+		$this->language->variables->create($right);
+
 		$this->language->addCommand('or', $hash, $left, $right);	
 	}
 }

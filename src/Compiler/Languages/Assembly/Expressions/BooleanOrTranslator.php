@@ -13,6 +13,9 @@ class BooleanOrTranslator extends Translator {
 		$this->compiler->compile($token->left);
 		$this->compiler->compile($token->right);
 
+		$this->compiler->variables->create($left);
+		$this->compiler->variables->create($right);
+
 		$this->language->addCommand('or', $hash, $left, $right);	
 	}
 }
