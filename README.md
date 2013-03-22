@@ -6,9 +6,11 @@ This compiles PHP into E100 Assembly. Written by Loic Sharma
 
 You'll need to have PHP installed for this. Obviously. Run the following commands:
 
-`cd /path/to/compiler`
-`curl -s http://getcomposer.org/installer | php`
-`php composer.phar install`
+```bash
+cd /path/to/compiler
+curl -s http://getcomposer.org/installer | php
+php composer.phar install
+```
 
 This will install all of the compiler's dependencies.
 
