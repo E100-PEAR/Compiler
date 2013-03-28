@@ -204,20 +204,28 @@ class Language extends CompilerLanguage {
 	{
 		$output = '';
 
+		// Get the commands.
 		foreach($this->commands as $command)
 		{
 			$output .= $command;
 		}
 
+		// Halt the program at the end.
 		$output .= PHP_EOL;
 		$output .= "\t".'halt' . PHP_EOL.PHP_EOL;
 
+		// Get the compiled variables.
 		$output .= $this->variables . PHP_EOL;
 
 		for($i = 0; $i <= $this->largestInteger; $i++)
 		{
 			$output .= '_int_'.$i.' .data ' . $i.PHP_EOL;
 		}
+
+		$output .= 'false .data 0'.PHP_EOL;
+		$output .= 'true .data 1'.PHP_EOL;
+		$output .= '_callstack_counter .data 0'.PHP_EOL;
+		$output .= '_callstack .data 0'.PHP_EOL;
 
 		return $output;
 	}
